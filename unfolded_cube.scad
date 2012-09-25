@@ -15,8 +15,8 @@ module frame_2d(size,th) {
 
 module hinge(size,spacing,wall_h) {
   hull() {
-    translate([size/2-spacing,-size/2+sqrt(2)*spacing,wall_h]) cube([spacing/sqrt(2),spacing/sqrt(2),wall_h],center=true);
-    translate([size/2+2*spacing, size/2-sqrt(2)*spacing,wall_h]) cube([spacing/sqrt(2),spacing/sqrt(2),wall_h],center=true);
+    translate([size/2-spacing,-size/2+spacing,wall_h]) cube([spacing/2,spacing/sqrt(2),wall_h],center=true);
+    translate([size/2+2*spacing, size/2-spacing,wall_h]) cube([spacing/2,spacing/sqrt(2),wall_h],center=true);
   }
 }
 
