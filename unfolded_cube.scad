@@ -1,7 +1,10 @@
 // Simple Unfolded Cube
 
+use <OpenHardwareLogo.scad>
+
 render_part="unfolded_cube_map"; // unfolded_cube_map()
 render_part="unfolded_cube_w_led"; // unfolded_cube_w_led()
+render_part="unfolded_oshw_cube_w_led"; // unfolded_oshw_cube_w_led()
 
 module frame_2d(size,th) {
   difference() {
@@ -12,8 +15,8 @@ module frame_2d(size,th) {
 
 module hinge(size,spacing,wall_h) {
   hull() {
-    translate([size/2-spacing,-size/2+2*spacing,wall_h]) cube([spacing/2,spacing/2,wall_h],center=true);
-    translate([size/2+2*spacing, size/2-2*spacing,wall_h]) cube([spacing/2,spacing/2,wall_h],center=true);
+    translate([size/2-spacing,-size/2+sqrt(2)*spacing,wall_h]) cube([spacing/sqrt(2),spacing/sqrt(2),wall_h],center=true);
+    translate([size/2+2*spacing, size/2-sqrt(2)*spacing,wall_h]) cube([spacing/sqrt(2),spacing/sqrt(2),wall_h],center=true);
   }
 }
 
@@ -61,9 +64,8 @@ if(render_part=="unfolded_cube_map") {
   unfolded_cube_map();
 }
 
-module unfolded_cube_w_led(size=20.0, spacing=1.0, inner_h=5.0, wall_h=0.5,wall_th=2.0, led_d=5.2) {
-  $fn=16;
-  unfolded_cube_map(size=size,wall_th=wall_th,wall_h=wall_h,spacing=spacing) intersection() {
+module led_holder(size,spacing,inner_h,wall_h,wall_th,led_d) {
+  intersection() {
     hull() {
       translate([0,0,spacing/4]) cube([size-spacing,size-spacing,spacing/2],center=true);
       translate([0,0,inner_h-wall_h/2]) cube([size-2*inner_h-spacing,size-2*inner_h-spacing,wall_h],center=true);
@@ -78,8 +80,31 @@ module unfolded_cube_w_led(size=20.0, spacing=1.0, inner_h=5.0, wall_h=0.5,wall_
   }
 }
 
+module unfolded_cube_w_led(size=20.0, spacing=1.0, inner_h=5.0, wall_h=0.5,wall_th=2.0, led_d=5.2) {
+  $fn=16;
+  unfolded_cube_map(size=size,wall_th=wall_th,wall_h=wall_h,spacing=spacing) led_holder(size,spacing,inner_h,wall_h,wall_th,led_d);
+}
+
 if(render_part=="unfolded_cube_w_led") {
   echo("Rendering unfolded_cube_w_led()...");
   unfolded_cube_w_led(wall_h=0.5,led_d=5.6,inner_h=1.25);
+}
+
+module unfolded_oshw_cube_w_led(size=30.0, spacing=2.0, inner_h=5.0, wall_h=0.5,wall_th=2.0, led_d=5.2) {
+  $fn=16;
+  unfolded_cube_map(size=size,wall_th=wall_th,wall_h=wall_h,spacing=spacing) {
+    led_holder(size,spacing,inner_h,wall_h,wall_th,led_d); // Top face object
+    linear_extrude(height=inner_h/2) rotate(90) shell_2d(width=wall_th/sqrt(2),steps=8,scale_x=1.0,scale_y=1.0) oshw_logo_2d(scale=(size-sqrt(2)*spacing)/200);
+    linear_extrude(height=inner_h/2) rotate(180) shell_2d(width=wall_th/sqrt(2),steps=8,scale_x=1.0,scale_y=1.0) oshw_logo_2d(scale=(size-sqrt(2)*spacing)/200);
+    linear_extrude(height=inner_h/2) rotate(-90) shell_2d(width=wall_th/sqrt(2),steps=8,scale_x=1.0,scale_y=1.0) oshw_logo_2d(scale=(size-sqrt(2)*spacing)/200);
+    linear_extrude(height=inner_h/2) shell_2d(width=wall_th/sqrt(2),steps=8,scale_x=1.0,scale_y=1.0) oshw_logo_2d(scale=(size-sqrt(2)*spacing)/200);
+    led_holder(size,spacing,inner_h,wall_h,wall_th,led_d); // Bottom face object
+
+  }
+}
+
+if(render_part=="unfolded_oshw_cube_w_led") {
+  echo("Rendering unfolded_oshw_cube_w_led()...");
+  rotate([0,0,-90]) unfolded_oshw_cube_w_led(wall_h=0.5,led_d=5.6,inner_h=1.25);
 }
 
