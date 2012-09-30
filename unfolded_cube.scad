@@ -8,6 +8,7 @@ render_part="unfolded_cube_w_led"; // unfolded_cube_w_led()
 render_part="unfolded_oshw_cube_w_led"; // unfolded_oshw_cube_w_led()
 render_part="unfolded_oshw_reprap_cube_w_led"; // unfolded_oshw_reprap_cube_w_led()
 render_part="unfolded_oshw_reprap_cube_w_led_4x"; // unfolded_oshw_reprap_cube_w_led() x 4
+render_part="unfolded_oshw_reprap_cube_w_led_large"; // unfolded_oshw_reprap_cube_w_led()
 
 
 module frame_2d(size,th) {
@@ -27,12 +28,12 @@ module hinge(size,spacing,wall_h,wall_th) {
 
 module double_hinge(size,spacing,wall_h,wall_th) {
   hull() {
-    translate([size/2-spacing+wall_th/2,-size/2+spacing-wall_th/2,(1-3/8)*wall_h]) cylinder($fn=8,r=wall_th/2,h=3*wall_h/4,center=true);
+    translate([size/2-spacing+wall_th/2,-size/2+2*spacing-wall_th/2,(1-3/8)*wall_h]) cylinder($fn=8,r=wall_th/2,h=3*wall_h/4,center=true);
     translate([size/2+2*spacing-wall_th/2, -spacing+wall_th/2,(1-3/8)*wall_h]) cylinder($fn=8,r=wall_th/2,h=3*wall_h/4,center=true);
   }
   hull() {
     translate([size/2-spacing+wall_th/2,spacing-wall_th/2,(1-3/8)*wall_h]) cylinder($fn=8,r=wall_th/2,h=3*wall_h/4,center=true);
-    translate([size/2+2*spacing-wall_th/2, size/2-spacing+wall_th/2,(1-3/8)*wall_h]) cylinder($fn=8,r=wall_th/2,h=3*wall_h/4,center=true);
+    translate([size/2+2*spacing-wall_th/2, size/2-2*spacing+wall_th/2,(1-3/8)*wall_h]) cylinder($fn=8,r=wall_th/2,h=3*wall_h/4,center=true);
   }
 }
 
@@ -178,7 +179,7 @@ module unfolded_oshw_reprap_cube_w_led(size=30.0, spacing=2.0, inner_h=5.0, wall
         translate([0,0,wall_h/2]) cube([size-spacing,size-spacing,wall_h],center=true);
         translate([0,0,inner_h-wall_h/2]) cube([size-2*inner_h-spacing,size-2*inner_h-spacing,wall_h],center=true);
       }
-      linear_extrude(height=inner_h) rotate(90) shell_2d(width=wall_th,steps=8,scale_x=1.0,scale_y=1.0) oshw_logo_2d(scale=(size-wall_th/2)/200);
+      linear_extrude(height=inner_h) rotate(90) shell_2d(width=wall_th,steps=8,scale_x=1.0,scale_y=1.0) oshw_logo_2d(scale=(size+spacing)/200);
     }
     rotate(-90) render() intersection() {
       hull() {
@@ -192,7 +193,7 @@ module unfolded_oshw_reprap_cube_w_led(size=30.0, spacing=2.0, inner_h=5.0, wall
         translate([0,0,wall_h/2]) cube([size-spacing,size-spacing,wall_h],center=true);
         translate([0,0,inner_h-wall_h/2]) cube([size-2*inner_h-spacing,size-2*inner_h-spacing,wall_h],center=true);
       }
-      linear_extrude(height=inner_h) shell_2d(width=wall_th,steps=8,scale_x=1.0,scale_y=1.0) oshw_logo_2d(scale=(size-wall_th/2)/200);
+      linear_extrude(height=inner_h) shell_2d(width=wall_th,steps=8,scale_x=1.0,scale_y=1.0) render() oshw_logo_2d(scale=(size+spacing)/200);
     }
     render() intersection() {
       hull() {
@@ -218,4 +219,11 @@ if(render_part=="unfolded_oshw_reprap_cube_w_led_4x") {
   echo("Rendering unfolded_oshw_reprap_cube_w_led() x 4...");
   for(i=[0:uorcwl_count-1]) translate([(i-(uorcwl_count-1)/2)*sqrt(2)*uorcwl_size,0,0])
   rotate(45) translate([0,(uorcwl_size+uorcwl_spacing)/2,0]) unfolded_oshw_reprap_cube_w_led(size=uorcwl_size,spacing=uorcwl_spacing,wall_h=0.75,wall_th=0.8,led_d=5.6,inner_h=1.5);
+}
+
+uorcwl_size_large=40.0;
+if(render_part=="unfolded_oshw_reprap_cube_w_led_large") {
+  echo("Rendering large unfolded_oshw_reprap_cube_w_led()...");
+  rotate(90+45) translate([0,(uorcwl_size_large+uorcwl_spacing)/2,0])
+	unfolded_oshw_reprap_cube_w_led(size=uorcwl_size_large,spacing=uorcwl_spacing,wall_h=0.75,wall_th=0.8,led_d=5.6,inner_h=1.5);
 }
