@@ -152,13 +152,13 @@ module unfolded_cube_map_s(size=15.0,spacing=1.0,wall_th=2.0,wall_h=1.0,add_hing
   if(add_hinges) double_hinge(size,spacing,wall_h,wall_th);
   if(add_hinges) rotate(-90) double_hinge(size,spacing,wall_h,wall_th);
   if(add_tabs) unfolded_tab(size=size,spacing=spacing,wall_th=wall_th,wall_h=wall_h);
-  if(add_tabs) rotate(90) unfolded_slot(size=size,spacing=spacing,wall_th=wall_th,wall_h=wall_h);
+  if(add_tabs) rotate(90) unfolded_tab(size=size,spacing=spacing,wall_th=wall_th,wall_h=wall_h);
   if($children>0) child(0);
   // CCW from X+
   // face 1
   translate([size+spacing,0,0]) {
     linear_extrude(height=wall_h) frame_2d(size-spacing,wall_th);
-    if(add_tabs) rotate(-90) unfolded_tab(size=size,spacing=spacing,wall_th=wall_th,wall_h=wall_h);
+    if(add_tabs) rotate(-90) unfolded_slot(size=size,spacing=spacing,wall_th=wall_th,wall_h=wall_h);
     if(add_tabs) rotate(180) unfolded_slot(size=size,spacing=spacing,wall_th=wall_th,wall_h=wall_h);
     if(add_hinges) rotate(90) double_hinge(size,spacing,wall_h,wall_th);
     if($children==1) child(0);
@@ -167,6 +167,7 @@ module unfolded_cube_map_s(size=15.0,spacing=1.0,wall_th=2.0,wall_h=1.0,add_hing
   // face 2
   translate([size+spacing,size+spacing,0]) {
     linear_extrude(height=wall_h) frame_2d(size-spacing,wall_th);
+    if(add_tabs) rotate(-90) unfolded_slot(size=size,spacing=spacing,wall_th=wall_th,wall_h=wall_h);
     if(add_tabs) rotate(90) unfolded_slot(size=size,spacing=spacing,wall_th=wall_th,wall_h=wall_h);
     if(add_tabs) unfolded_tab(size=size,spacing=spacing,wall_th=wall_th,wall_h=wall_h);
     if($children==1) child(0);
@@ -175,7 +176,7 @@ module unfolded_cube_map_s(size=15.0,spacing=1.0,wall_th=2.0,wall_h=1.0,add_hing
   // face 3
   translate([-size-spacing,-size-spacing,0]) {
     linear_extrude(height=wall_h) frame_2d(size-spacing,wall_th);
-    if(add_tabs) unfolded_tab(size=size,spacing=spacing,wall_th=wall_th,wall_h=wall_h);
+    if(add_tabs) unfolded_slot(size=size,spacing=spacing,wall_th=wall_th,wall_h=wall_h);
     if(add_tabs) rotate(90) unfolded_slot(size=size,spacing=spacing,wall_th=wall_th,wall_h=wall_h);
     if(add_hinges) double_hinge(size,spacing,wall_h,wall_th);
     if($children==1) child(0);
@@ -192,8 +193,9 @@ module unfolded_cube_map_s(size=15.0,spacing=1.0,wall_th=2.0,wall_h=1.0,add_hing
   // Bottom face 5
   translate([-size-spacing,-2*(size+spacing),0]) {
     linear_extrude(height=wall_h) frame_2d(size-spacing,wall_th);
+    if(add_tabs) rotate(90) unfolded_tab(size=size,spacing=spacing,wall_th=wall_th,wall_h=wall_h);
     if(add_tabs) rotate(-90) unfolded_tab(size=size,spacing=spacing,wall_th=wall_th,wall_h=wall_h);
-    if(add_tabs) rotate(180) unfolded_slot(size=size,spacing=spacing,wall_th=wall_th,wall_h=wall_h);
+    if(add_tabs) rotate(180) unfolded_tab(size=size,spacing=spacing,wall_th=wall_th,wall_h=wall_h);
     rotate([0,0,90]) double_hinge(size,spacing,wall_h,wall_th);
     if($children==1) child(0);
     if($children>5) child(5);
